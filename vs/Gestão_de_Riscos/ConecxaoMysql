@@ -1,0 +1,283 @@
+import mysql.connector
+import pandas as pd
+import ConecxaoSql
+conexao = mysql.connector.connect(
+    host='127.0.0.1',
+    user='root',
+    password='123',
+    database='projetos',
+)
+cursor = conexao.cursor()
+def stup (nm, st, tarefaid):
+    tabela = nm 
+    status = st
+    tarefaid = tarefaid
+    stupdate = f"UPDATE St_IRisco SET {tabela} = '{status}'  WHERE TarefaId = '{tarefaid}'"
+    cursor.execute(stupdate)
+    conexao.commit()
+
+
+last_id = "SELECT Id FROM IRisco ORDER BY id DESC limit 1"
+cursor.execute(last_id)
+last_id = cursor.fetchall() 
+last_id = str(last_id).split(',')
+last_id = last_id[0].split('[(')
+last_id = int(last_id[1])
+
+nrr = 0
+for i in range(len(ConecxaoSql.Itarefa_id)):
+    last_id = last_id + 1
+    
+    vid = str(ConecxaoSql.Itarefa_id.loc[i]).split('[')
+    vid = vid[1].split(']')
+    Vid = str(vid[0])
+
+    consulta = f"SELECT * FROM IRisco WHERE Tarefa_id = '{Vid}'"
+    cursor.execute(consulta)
+    resultado = cursor.fetchall()
+
+    if resultado:
+        print('Já existe')
+    else:
+        newline = f"INSERT INTO projetos.IRisco (Id) VALUES ({last_id})"
+        cursor.execute(newline)
+        conexao.commit        
+
+        newlinest = f"INSERT INTO projetos.St_IRisco (TarefaId) VALUES ('{Vid}')"
+        cursor.execute(newlinest)
+        conexao.commit        
+
+        vcontrato = str(ConecxaoSql.Icontrato.loc[i]).split("[")
+        vcontrato = vcontrato[1].split("]")
+        Vcontrato = vcontrato[0]
+
+        vatividade = str(ConecxaoSql.Iatividade.loc[i]).split("[")
+        vatividade = vatividade[1].split("]")
+        Vatividade = vatividade[0]
+
+        vtarefa = str(ConecxaoSql.Itarefa.loc[i]).split("[")
+        vtarefa = vtarefa[1].split("]")
+        Vtarefa = vtarefa[0]
+
+        vfuncao = str(ConecxaoSql.Ifuncao.loc[i]).split("[")
+        vfuncao = vfuncao[1].split("]")
+        Vfuncao = vfuncao[0]
+
+        vperigo = str(ConecxaoSql.Iperigo.loc[i]).split("[")
+        vperigo = vperigo[1].split("]")
+        Vperigo = vperigo[0]
+
+        vcondicaoPerigo = str(ConecxaoSql.IcondicaoPerigo.loc[i]).split("[")
+        vcondicaoPerigo = vcondicaoPerigo[1].split("]")
+        VcondicaoPerigo = vcondicaoPerigo[0]
+
+        vrisco = str(ConecxaoSql.Irisco.loc[i]).split("[")
+        vrisco = vrisco[1].split("]")
+        Vrisco = vrisco[0]
+
+        vdano = str(ConecxaoSql.Idano.loc[i]).split("[")
+        vdano = vdano[1].split("]")
+        Vdano = vdano[0]
+
+        vqpe = str(ConecxaoSql.Iqpe.loc[i]).split("[")
+        vqpe = vqpe[1].split("]")
+        Vqpe = vqpe[0]
+
+        veliminacao = str(ConecxaoSql.Ieliminacao.loc[i]).split("[")
+        veliminacao = veliminacao[1].split("]")
+        Veliminacao = veliminacao[0]
+        
+        sveliminacao = str(ConecxaoSql.Iseliminacao.loc[i]).split("[")
+        sveliminacao = sveliminacao[1].split("]")
+        sVeliminacao = sveliminacao[0]
+        if (sVeliminacao == 'Realizado'):
+            nrr = 100
+            stup('St_Elim', sVeliminacao,Vid)
+        else:
+            nrr = 0
+            stup('St_Elim', sVeliminacao,Vid)
+
+        vreducao = str(ConecxaoSql.Ireducao.loc[i]).split("[")
+        vreducao = vreducao[1].split("]")
+        Vreducao = vreducao[0]
+
+        svreducao = str(ConecxaoSql.Isreducao.loc[i]).split("[")
+        svreducao = svreducao[1].split("]")
+        sVreducao = svreducao[0]
+        if (sVreducao == 'Realizado'):
+            nrr =  nrr + 30
+            stup('St_Red', sVreducao,Vid)
+        else:
+            nrr = nrr + 0
+            stup('St_Red', sVreducao,Vid)
+
+        vinterceptacao = str(ConecxaoSql.Iinterceptacao.loc[i]).split("[")
+        vinterceptacao = vinterceptacao[1].split("]")
+        Vinterceptacao = vinterceptacao[0]
+
+        svinterceptacao = str(ConecxaoSql.Isinterceptacao.loc[i]).split("[")
+        svinterceptacao = svinterceptacao[1].split("]")
+        sVinterceptacao = svinterceptacao[0]
+        if (sVinterceptacao == 'Realizado'):
+            nrr =  nrr + 25
+            stup('St_Inter', sVinterceptacao, Vid)
+        else:
+            nrr =  nrr + 0
+            stup('St_Inter', sVinterceptacao, Vid)
+
+        vadvertencia = str(ConecxaoSql.Iadvertencia.loc[i]).split("[")
+        vadvertencia = vadvertencia[1].split("]")
+        Vadvertencia = vadvertencia[0]
+
+        svadvertencia = str(ConecxaoSql.Isadvertencia.loc[i]).split("[")
+        svadvertencia = svadvertencia[1].split("]")
+        sVadvertencia = svadvertencia[0]
+        if (sVadvertencia == 'Realizado'):
+            nrr =  nrr + 15
+            stup('St_Ad', sVadvertencia, Vid)
+        else: 
+            nrr =  nrr + 0
+            stup('St_Ad', sVadvertencia, Vid)
+
+        vverificacao = str(ConecxaoSql.Iverificacao.loc[i]).split("[")
+        vverificacao = vverificacao[1].split("]")
+        Vverificacao = vverificacao[0]
+
+        svverificacao = str(ConecxaoSql.Isverificacao.loc[i]).split("[")
+        svverificacao = svverificacao[1].split("]")
+        sVverificacao = svverificacao[0]
+        if (sVverificacao=='Realizado'):
+            nrr =  nrr + 10
+            stup('St_Ver', sVverificacao,Vid)
+        else:
+            nrr =  nrr + 0
+            stup('St_Ver', sVverificacao,Vid)
+
+        vconscientizacao = str(ConecxaoSql.Iconscientizacao.loc[i]).split("[")
+        vconscientizacao = vconscientizacao[1].split("]")
+        Vconscientizacao = vconscientizacao[0]
+
+        svconscientizacao = str(ConecxaoSql.Isconscientizacao.loc[i]).split("[")
+        svconscientizacao = svconscientizacao[1].split("]")
+        sVconscientizacao = svconscientizacao[0]
+        if (sVconscientizacao == 'Realizado'):
+            nrr =  nrr + 7
+            stup('St_Cons', sVconscientizacao,Vid)
+        else:
+            nrr =  nrr + 0
+            stup('St_Cons', sVconscientizacao,Vid)
+
+        vpadronizacao = str(ConecxaoSql.Ipadronizacao.loc[i]).split("[")
+        vpadronizacao = vpadronizacao[1].split("]")
+        Vpadronizacao = vpadronizacao[0]
+
+        svpadronizacao = str(ConecxaoSql.Ispadronizacao.loc[i]).split("[")
+        svpadronizacao = svpadronizacao[1].split("]")
+        sVpadronizacao = svpadronizacao[0]
+        if (sVpadronizacao == 'Realizado'):
+            nrr =  nrr + 5
+            stup('St_Pad', sVpadronizacao,Vid)
+        else:
+            nrr =  nrr + 0
+            stup('St_Pad', sVpadronizacao,Vid)
+
+        vepi = str(ConecxaoSql.Iepi.loc[i]).split("[")
+        vepi = vepi[1].split("]")
+        Vepi = vepi[0]
+
+        svepi = str(ConecxaoSql.Isepi.loc[i]).split("[")
+        svepi = svepi[1].split("]")
+        sVepi = svepi[0]
+        if (sVepi == 'Realizado'):
+            nrr =  nrr + 4
+            stup('St_Epi', sVepi,Vid)
+        else:
+            nrr =  nrr + 0
+            stup('St_Epi', sVepi,Vid)
+
+        vsupervisao = str(ConecxaoSql.Isupervisao.loc[i]).split("[")
+        vsupervisao = vsupervisao[1].split("]")
+        Vsupervisao = vsupervisao[0]
+
+        svsupervisao = str(ConecxaoSql.Issupervisao.loc[i]).split("[")
+        svsupervisao = svsupervisao[1].split("]")
+        sVsupervisao = svsupervisao[0]
+        if (sVsupervisao == 'Realizacao'):
+            nrr =  nrr + 2
+            stup('St_Sup', sVsupervisao,Vid)
+        else:
+            nrr =  nrr + 0
+            stup('St_Sup', sVsupervisao,Vid)
+
+        vatencao = str(ConecxaoSql.Iatencao.loc[i]).split("[")
+        vatencao = vatencao[1].split("]")
+        Vatencao = vatencao[0]
+
+        svatencao = str(ConecxaoSql.Isatencao.loc[i]).split("[")
+        svatencao = svatencao[1].split("]")
+        sVatencao = svatencao[0]
+        if (sVatencao == 'Realizado'):
+            nrr =  nrr + 1
+            stup('St_Aten', sVatencao,Vid)
+        else:
+            nrr =  nrr + 0
+            stup('St_Aten', sVatencao,Vid)
+
+        vac = str(ConecxaoSql.Iac.loc[i]).split("[")
+        vac = vac[1].split("]")
+        Vac = vac[0]
+
+        probabilidade = str(ConecxaoSql.Iprobabilidade_df.loc[i]).split('-')
+        probabilidade = str(probabilidade).split()
+        probabilidade = str(probabilidade[1]).split('[')
+        Vprobabilidade = int(probabilidade[1])
+
+        exposicao = str(ConecxaoSql.Iexposicao_df.loc[i]).split('-')
+        exposicao = str(exposicao).split()
+        exposicao = str(exposicao[1]).split('[')
+        Vexposicao = int(exposicao[1])
+
+        severidade = str(ConecxaoSql.Iseveridade_df.loc[i]).split('-')
+        severidade = str(severidade[0]).split('[')
+        Vseveridade = int(severidade[1])
+
+        
+        #Obtendo o NRB
+        nrb = Vseveridade*Vexposicao*Vprobabilidade
+        if (nrb <= 10):
+            cr_sc = 'Risco aceitável'
+        elif(nrb <= 34 and nrb > 10):
+            cr_sc = 'Requer atenção'
+        elif(nrb <= 70 and nrb >= 35):
+            cr_sc = 'Requer melhoria'
+        elif(nrb <=100 and nrb >=71):
+            cr_sc = 'Medidas imediatas são requeridas'
+        else:
+            cr_sc = 'Considere parar com a atividade' 
+
+        if(nrr>nrb):
+            nrr = nrr - nrb
+        else:
+            nrr = nrb - nrr
+
+        if (nrr <= 10):
+            class_ac = 'Risco aceitável'
+        elif(nrr <= 34 and nrr >= 10):
+            class_ac = 'Requer atenção'
+        elif(nrr <= 70 and nrr >= 35):
+            class_ac = 'Requer melhoria'
+        elif(nrr <=100 and nrr >=71):
+            class_ac = 'Medidas imediatas são requeridas'
+        else:
+            class_ac = 'Considere parar com a atividade'
+
+        comando = f"UPDATE projetos.IRisco SET CONTRATO = ('{Vcontrato.upper()}'), ATIVIDADE = ('{Vatividade.upper()}'), FUNCAO =('{Vfuncao.upper()}') ,PERIGO = ('{Vperigo.upper()}'), CONDICAO_PERIGO = ('{VcondicaoPerigo.upper()}'), RISCO =('{Vrisco.upper()}') , DANO =('{Vdano.upper()}') , QPE = ({Vqpe}) , SEVERIDADE = ({Vseveridade}), EXPOSICAO = ({Vexposicao}) , PROBABILIDADE = ({Vprobabilidade}) , NRB = ({nrb}) , CLASSIFICACAO_RISCO_SC = ('{cr_sc.upper()}') , ELIMINACAO = ('{Veliminacao.upper()}'), ADVERTENCIA = ('{Vadvertencia.upper()}'), VERIFICACAO = ('{Vverificacao.upper()}'), CONSCIENTIZACAO = ('{Vconscientizacao.upper()}'), PADRONIZACAO = ('{Vpadronizacao.upper()}'), EPI = ('{Vepi.upper()}'), SUPERVISAO = ('{Vsupervisao.upper()}'), ATENCAO = ('{Vatencao.upper()}'), ACAO_CONTENCAO = ('{Vac.upper()}'), NRR = ({nrr}), CLASSIFICACAO_RISCO_AC = ('{class_ac.upper()}'), Tarefa_id = ('{Vid}') WHERE Id = {last_id}"
+        cursor.execute(comando)
+        conexao.commit()
+
+        comando = f"UPDATE projetos.St_IRisco SET St_Elim = ('{sVeliminacao.upper()}'), St_Red = ('{sVreducao.upper()}'), St_Inter = ('{sVinterceptacao.upper()}'), St_Ad =('{sVadvertencia.upper()}') ,St_Ver = ('{sVverificacao.upper()}'), St_Cons = ('{sVconscientizacao.upper()}'), St_Pad =('{sVpadronizacao.upper()}') , St_Epi =('{sVepi.upper()}') , St_Sup = ('{sVsupervisao.upper()}') , St_Aten = ('{sVatencao.upper()}')"
+        cursor.execute(comando)
+        conexao.commit()
+        
+cursor.close()
+conexao.close()         

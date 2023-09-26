@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            background: rgb(1, 247, 255);
+        }
+    </style>
+</head>
+<body>
+    <h1>INICIANDO ESTUDOS DOM</h1>
+    <P>aqui vai o resultado</P>
+    <p>Aprendendo a usar <strong> DOM</strong> em js</p>
+    <div id="msg">Clique em mim</div>
+
+    <a class="btn btn-primary" href="https://segredosdomundo.r7.com/wp-content/uploads/2020/03/pombo-o-que-e-como-vive-tipos-diferentes-e-riscos-a-saude.jpg" role="button">BUTAOK</a>
+
+    <script>
+        var corpo = window.document.body
+        var p1 = window.document.getElementsByTagName('p')[0]
+        window.document.write(p1.innerText);
+       
+        var d = window.document.querySelector('div#msg')
+        d.style.background = 'black'
+        d.style.color = 'pink'
+       
+        var but = document.getElementsByClassName('btn btn-primary')[0]
+        but.style.background = 'pink'
+
+        
+
+        // var d = document.getElementsByName('msg')[0]
+        // d.innerText ='peidei'
+        
+        // var d = window.document.getElementById('msg')
+        // d.style.background = 'green'
+    </script>
+</body>
+</html>
